@@ -66,12 +66,21 @@ if /I "%MODE%"=="full" (
 if "%SKIP_FRONTEND%"=="0" (
 	echo [2/2] Starting frontend on http://localhost:5173 ...
 	if /I "%MODE%"=="full" (
+<<<<<<< HEAD
 	    start "Vibecoding Frontend" powershell -NoExit -ExecutionPolicy Bypass -Command "Set-Location -LiteralPath '%ROOT%frontend'; npm.cmd install; npm.cmd run dev"
 	) else (
 	    start "Vibecoding Frontend" powershell -NoExit -ExecutionPolicy Bypass -Command "Set-Location -LiteralPath '%ROOT%frontend'; if (-not (Test-Path node_modules)) { npm.cmd install }; npm.cmd run dev"
 	)
 ) else (
 	echo [2/2] Frontend skipped ^(npm not found^).
+=======
+	    start "Vibecoding Frontend" powershell -NoExit -ExecutionPolicy Bypass -Command "Set-Location -LiteralPath '%ROOT%frontend'; npm install; npm run dev"
+	) else (
+	    start "Vibecoding Frontend" powershell -NoExit -ExecutionPolicy Bypass -Command "Set-Location -LiteralPath '%ROOT%frontend'; if (-not (Test-Path node_modules)) { npm install }; npm run dev"
+	)
+) else (
+	echo [2/2] Frontend skipped (npm not found).
+>>>>>>> 7db5c796e1fdc841e2632390b2f274a550006d9b
 )
 
 echo.
