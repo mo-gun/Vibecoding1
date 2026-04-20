@@ -58,29 +58,20 @@ if errorlevel 1 (
 
 echo [1/2] Starting backend on http://localhost:8000 ...
 if /I "%MODE%"=="full" (
-	start "Vibecoding Backend" powershell -NoExit -ExecutionPolicy Bypass -Command "Set-Location -LiteralPath '%ROOT%backend'; if (-not (Test-Path .venv)) { python -m venv .venv }; .\.venv\Scripts\Activate.ps1; pip install -r requirements.txt; uvicorn main:app --reload --host 0.0.0.0 --port 8000"
+	start "Vibecoding Backend" powershell -NoExit -ExecutionPolicy Bypass -Command "Set-Location -LiteralPath '%ROOT%backend'; if (-not (Test-Path .venv)) { python -m venv .venv }; .\.venv\Scripts\python.exe -m pip install -r requirements.txt; .\.venv\Scripts\python.exe -m uvicorn main:app --reload --host 0.0.0.0 --port 8000"
 ) else (
-	start "Vibecoding Backend" powershell -NoExit -ExecutionPolicy Bypass -Command "Set-Location -LiteralPath '%ROOT%backend'; if (-not (Test-Path .venv)) { python -m venv .venv }; .\.venv\Scripts\Activate.ps1; if (-not (Get-Command uvicorn -ErrorAction SilentlyContinue)) { pip install -r requirements.txt }; uvicorn main:app --reload --host 0.0.0.0 --port 8000"
+	start "Vibecoding Backend" powershell -NoExit -ExecutionPolicy Bypass -Command "Set-Location -LiteralPath '%ROOT%backend'; if (-not (Test-Path .venv)) { python -m venv .venv }; .\.venv\Scripts\python.exe -c 'import uvicorn, fastapi' 2>$null; if ($LASTEXITCODE -ne 0) { .\.venv\Scripts\python.exe -m pip install -r requirements.txt }; .\.venv\Scripts\python.exe -m uvicorn main:app --reload --host 0.0.0.0 --port 8000"
 )
 
 if "%SKIP_FRONTEND%"=="0" (
 	echo [2/2] Starting frontend on http://localhost:5173 ...
 	if /I "%MODE%"=="full" (
-<<<<<<< HEAD
 	    start "Vibecoding Frontend" powershell -NoExit -ExecutionPolicy Bypass -Command "Set-Location -LiteralPath '%ROOT%frontend'; npm.cmd install; npm.cmd run dev"
 	) else (
 	    start "Vibecoding Frontend" powershell -NoExit -ExecutionPolicy Bypass -Command "Set-Location -LiteralPath '%ROOT%frontend'; if (-not (Test-Path node_modules)) { npm.cmd install }; npm.cmd run dev"
 	)
 ) else (
 	echo [2/2] Frontend skipped ^(npm not found^).
-=======
-	    start "Vibecoding Frontend" powershell -NoExit -ExecutionPolicy Bypass -Command "Set-Location -LiteralPath '%ROOT%frontend'; npm install; npm run dev"
-	) else (
-	    start "Vibecoding Frontend" powershell -NoExit -ExecutionPolicy Bypass -Command "Set-Location -LiteralPath '%ROOT%frontend'; if (-not (Test-Path node_modules)) { npm install }; npm run dev"
-	)
-) else (
-	echo [2/2] Frontend skipped (npm not found).
->>>>>>> 7db5c796e1fdc841e2632390b2f274a550006d9b
 )
 
 echo.
